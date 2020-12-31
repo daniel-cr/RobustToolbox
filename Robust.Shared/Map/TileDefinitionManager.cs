@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Robust.Shared.Interfaces.Map;
 
@@ -9,6 +9,7 @@ namespace Robust.Shared.Map
         protected readonly List<ITileDefinition> TileDefs;
         private readonly Dictionary<string, ITileDefinition> _tileNames;
         private readonly Dictionary<ITileDefinition, ushort> _tileIds;
+        private readonly List<ushort> _lookupBase;
 
         /// <summary>
         /// Default Constructor.
@@ -18,6 +19,7 @@ namespace Robust.Shared.Map
             TileDefs = new List<ITileDefinition>();
             _tileNames = new Dictionary<string, ITileDefinition>();
             _tileIds = new Dictionary<ITileDefinition, ushort>();
+            _lookupBase = new List<ushort>();
         }
 
         public virtual void Initialize()
@@ -53,6 +55,25 @@ namespace Robust.Shared.Map
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
+        }
+
+        public void SetLookUp(string s)
+        {
+            _lookupBase.Add(this[s].TileId);
+        }
+
+        public ushort GetBaseTurfId(ushort tileId, int steps = 1)
+        {
+            while(tileId > 0 && steps-- > 0)
+            {
+                tileId = _lookupBase[tileId];
+            }
+            return tileId;
+        }
+
+        public ITileDefinition GetBaseTurfTileDef(ushort tileId, int steps = 1)
+        {
+            return this[GetBaseTurfId(tileId, steps)];
         }
     }
 }

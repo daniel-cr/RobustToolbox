@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Robust.Shared.Network.Messages;
 
 namespace Robust.Shared.Interfaces.Map
@@ -34,5 +34,12 @@ namespace Robust.Shared.Interfaces.Map
         /// </summary>
         /// <param name="tileDef">THe definition to register.</param>
         void Register(ITileDefinition tileDef);
+
+        void SetLookUp(string baseTurf);
+
+        ushort GetBaseTurfId(ushort tileId, int steps=1);
+
+        ITileDefinition GetBaseTurfTileDef(ushort tileId, int steps=1);
+
     }
 }
